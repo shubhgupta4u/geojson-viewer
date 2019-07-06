@@ -28,9 +28,20 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.less",
+              "src/CodeMirror/addon/fold/foldgutter.css",
+              "src/CodeMirror/theme/eclipse.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/script.js",
+              "src/CodeMirror/lib/codemirror.js",
+              "src/CodeMirror/addon/fold/foldcode.js",
+              "src/CodeMirror/addon/fold/foldgutter.js",
+              "src/CodeMirror/addon/fold/brace-fold.js",
+              "src/CodeMirror/addon/selection/active-line.js",
+              "src/CodeMirror/mode/javascript/javascript.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -88,6 +99,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.less"
             ],
             "scripts": []
@@ -119,6 +131,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "geojson-viewer"
 }
