@@ -8,17 +8,22 @@ import { AngularSplitModule } from 'angular-split';
 import { MapComponent } from './components/map/map.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import {MatTabsModule} from '@angular/material/tabs';
+import { UploadFileComponent } from './components/editor/upload-file/upload-file.component';
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    EditorComponent
+    EditorComponent,
+    UploadFileComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
+    FormsModule,
     AngularSplitModule.forRoot(),
     BrowserAnimationsModule,
     MatTabsModule

@@ -1,0 +1,29 @@
+<div class="card" style="margin: 10px;">
+  <div class="card-body">
+    <h5 class="card-title">Option 1: GeoJSON Url:</h5>
+    <div>
+      <input id="geojson-url" placeholder="http://" [(ngModel)]="geoJsonUrl" type="text" class="" />
+      <button class="btn btn-primary" (click)="getGeoJSONByUrl()">Go</button>
+    </div>
+  </div>
+</div>
+<div id="droparea" class="card" style="margin: 10px; margin-top: 0">
+  <div class="card-body">
+    <h5 class="card-title">Option 2: GeoJSON file Upload:</h5>
+    <div>
+      <span class="upload-icon" (click)="openFileDialog()" title="Upload GeoJSON"><i class="fa fa-upload"></i> Choose a
+        GeoJSON File or drag it here</span>
+
+      <input #fileInput id="geojsonFileInput" type="file" accept="application/json,application/geo+json" 
+            hidden="" (change)="onFileChange($event)">
+    </div>
+  </div>
+</div>
+<div class="card" style="margin: 10px; margin-top: 0">
+  <div class="card-body">
+    <h5 class="card-title">Reset Editor &amp; Clear map:</h5>
+    <div>
+      <button class="btn btn-primary" (click)="resetEditornClearMap()">Clear</button>
+    </div>
+  </div>
+</div>

@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
     }
     else{
       this.rightAreaSize = this.defaultRightAreaSize;
-      this.leftAreaSize = this.defaultRightAreaSize;
+      this.leftAreaSize = this.defaultLeftAreaSize;
     }
   }
   onEditorCollapeBtnClicked(){
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
     }
     else{
       this.rightAreaSize = this.defaultRightAreaSize;
-      this.leftAreaSize = this.defaultRightAreaSize;
+      this.leftAreaSize = this.defaultLeftAreaSize;
     }
   }
 }
