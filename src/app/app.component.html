@@ -4,7 +4,7 @@
   <as-split direction="horizontal" (dragStart)="onSpilterDragStart($event)" unit="percent" (dragEnd)="onSpilterDragEnd($event)">
     <as-split-area [(size)]="leftAreaSize" [minSize]="minAreaSize" [maxSize]="maxAreaSize">
       <div class="left-container">
-        <app-map [class.hide]="isMapMinimize"></app-map>
+        <app-map #mapView [class.hide]="isMapMinimize"></app-map>
         <div class="minimize-map" [class.minimize]="isMapMinimize">
           <div><button class="primary" (click)="onMapCollapeBtnClicked()" *ngIf="!isMapMinimize">
               <i class="fa fa-hand-o-left" title="Collapse Map View" aria-hidden="true"></i>
@@ -20,7 +20,9 @@
     </as-split-area>
     <as-split-area [(size)]="rightAreaSize" [minSize]="minAreaSize" [maxSize]="maxAreaSize">
       <div class="right-container">
-        <app-editor [class.hide]="isEditorMinimize"></app-editor>
+        <app-editor [class.hide]="isEditorMinimize"
+          (onGeoJsonChange)="onGeoJsonChange($event)"
+          (onResetRequest)="onResetRequest()"></app-editor>
         <div class="minimize-editor" [class.minimize]="isEditorMinimize">
           <div><button class="primary" (click)="onEditorCollapeBtnClicked()"  *ngIf="!isEditorMinimize">
               <i class="fa fa-hand-o-right" title="Collapse Editor View"

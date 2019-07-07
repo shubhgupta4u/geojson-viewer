@@ -22,7 +22,6 @@ export class UploadFileComponent implements OnInit {
         this.dropArea.addEventListener(eventName, (e)=>{
           e.preventDefault();
           e.stopPropagation();
-          console.log(e);
           self.dropArea.classList.add('highlight');
         }, false)
       });
@@ -30,7 +29,6 @@ export class UploadFileComponent implements OnInit {
         this.dropArea.addEventListener(eventName, (e)=>{
           e.preventDefault();
           e.stopPropagation();
-          console.log(e);
           self.dropArea.classList.remove('highlight');
         }, false)
       })
@@ -38,7 +36,6 @@ export class UploadFileComponent implements OnInit {
         this.dropArea.addEventListener(eventName, (e)=>{
           e.preventDefault();
           e.stopPropagation();
-          console.log(e);
           self.dropArea.classList.remove('highlight');
           let dt = e.dataTransfer
           let files = dt.files
@@ -73,7 +70,6 @@ export class UploadFileComponent implements OnInit {
       }
       this.httpService.getGeoJSONByUrl(this.geoJsonUrl).subscribe(
         (data: string) => {
-          console.log(data);
           let geojson: string =JSON.stringify(data, null, "\t");
           this.onfileUploaded.emit(geojson);
         }, // success path
@@ -97,7 +93,6 @@ export class UploadFileComponent implements OnInit {
   readUploadedFile(file:any){
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
-      console.log(fileReader.result);
       let geojsonObj:any = JSON.parse(fileReader.result.toString());
       if(geojsonObj){
         let geojson: string =JSON.stringify(geojsonObj, null, "\t");

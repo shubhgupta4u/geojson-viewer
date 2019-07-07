@@ -1,10 +1,13 @@
-import { Component, OnInit ,ViewChild} from '@angular/core';
+import { Component, OnInit ,ViewChild, Output, EventEmitter} from '@angular/core';
+import { FeatureCollection } from 'geojson-parser-js/models/geojson';
+import {Geojson} from 'geojson-parser-js';
 import * as $ from 'jquery';
-//import * as CodeMirror from 'codemirror/lib/codemirror.js';
 import * as defaultGeojson from '../../../assets/defaultGeojson.json';
 import { UploadFileComponent } from './upload-file/upload-file.component.js';
-declare var InitializeEditor;
+//import * as CodeMirror from 'codemirror/lib/codemirror.js';
+
 declare var CodeMirror;
+
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -15,6 +18,8 @@ export class EditorComponent implements OnInit{
   editor:any;
   code:string ='';
   selectedTabIndex:number = 0;
+  @Output() onGeoJsonChange = new EventEmitter<FeatureCollection>();
+  @Output() onResetRequest = new EventEmitter();
   @ViewChild('uploadFileComponent',{static:false}) uploadFileComponent:UploadFileComponent;
   constructor() { 
     this.code=JSON.stringify(defaultGeojson, null, "\t");
@@ -26,12 +31,16 @@ export class EditorComponent implements OnInit{
   }
   onfileUploaded(geojson){
     this.code =geojson;
-    this.editor.setValue(this.code);
+    this.editor.setValue(this.code);   
     this.selectedTabIndex = 0;
+  }
+  geoJsonChanged(features:FeatureCollection){
+      this.onGeoJsonChange.emit(features);
   }
   onResetRequested(){
     this.code =JSON.stringify(defaultGeojson, null, "\t");
     this.editor.setValue(this.code);
+    this.onResetRequest.emit();
     this.selectedTabIndex = 0;
   }
   ngOnInit() {
@@ -50,6 +59,12 @@ export class EditorComponent implements OnInit{
       });
       self.editor.foldCode(CodeMirror.Pos(0, 0));
       self.editor.setValue(self.code);
+      self.editor.on('change',function(cMirror){
+        // get value right from instance
+        self.code = cMirror.getValue();
+        let features:FeatureCollection = Geojson.parse(self.code);
+        self.geoJsonChanged(features);
+      });
     });
   }
 }

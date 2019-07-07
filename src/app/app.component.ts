@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {} from 'googlemaps';
+import { MapComponent } from './components/map/map.component';
+import { FeatureCollection } from 'geojson-parser-js/models/geojson';
 
 @Component({
   selector: 'app-root',
@@ -16,44 +18,10 @@ export class AppComponent implements OnInit {
   leftAreaSize:number=this.defaultLeftAreaSize;
   isEditorMinimize:boolean = false;
   isMapMinimize:boolean=false;
-  ngOnInit() {
-    let mapOptions: google.maps.MapOptions = { center: { lat: -25.363, lng: 131.044 }, zoom: 4};
-    let mapOptions1: google.maps.MapOptions = {
-      backgroundColor: '#fff',
-      center: { lat: -25.363, lng: 131.044 },
-      clickableIcons: true,
-      controlSize: 30,
-      draggable: true,
-      fullscreenControl: true,
-      fullscreenControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_TOP
-      },
-      gestureHandling: 'cooperative',
-      scrollwheel: true,
-      styles: [
-        {
-          elementType: 'geometry',
-          featureType: 'water',
-          stylers: [
-            {
-              color: '#00bdbd'
-            }
-          ]
-        },
-        {
-          elementType: 'geometry',
-          featureType: 'landscape.man_made',
-          stylers: [
-            {
-              color: '#f7f1df'
-            }
-          ]
-        }
-      ],
-      zoom: 4
-    };
-    /***** Create map *****/
-    let map: google.maps.Map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+  @ViewChild('mapView',{static:false}) mapView:MapComponent;
+
+  ngOnInit() {   
   }
   onSpilterDragStart(event){
     if(this.isMapMinimize)
@@ -101,5 +69,15 @@ export class AppComponent implements OnInit {
       this.rightAreaSize = this.defaultRightAreaSize;
       this.leftAreaSize = this.defaultLeftAreaSize;
     }
+  }
+  onGeoJsonChange(features:FeatureCollection){
+    this.mapView.onGeoJsonChange(features);
+  }
+  onResetRequest(){
+    this.rightAreaSize=this.defaultRightAreaSize;
+    this.leftAreaSize=this.defaultLeftAreaSize;
+    this.isEditorMinimize = false;
+    this.isMapMinimize = false;
+    this.mapView.onMapViewResest();
   }
 }
