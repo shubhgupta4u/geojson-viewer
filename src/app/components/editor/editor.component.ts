@@ -1,12 +1,6 @@
 import { Component, OnInit ,ViewChild} from '@angular/core';
 import * as $ from 'jquery';
-import * as CodeMirror from 'codemirror/lib/codemirror.js';
-import foldcode from  'codemirror/addon/fold/foldcode.js'
-import foldgutter from  'codemirror/addon/fold/foldgutter.js'
-import bracefold from  'codemirror/addon/fold/brace-fold.js'
-import activeline from  'codemirror/addon/selection/active-line.js'
-import matchbrackets from  'codemirror/addon/edit/matchbrackets.js'
-import 'codemirror/mode/javascript/javascript.js';
+//import * as CodeMirror from 'codemirror/lib/codemirror.js';
 import * as defaultGeojson from '../../../assets/defaultGeojson.json';
 declare var InitializeEditor;
 declare var CodeMirror;
@@ -38,9 +32,6 @@ export class EditorComponent implements OnInit{
       });
       self.editor.foldCode(CodeMirror.Pos(0, 0));
       self.editor.setValue(self.code);
-      var headerHeight =$('.mat-tab-header').height();
-      var height = $('#map').height();
-      $('.CodeMirror').css('height',height - headerHeight - 1);
     });
   }
 }

@@ -29,18 +29,20 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/font-awesome/css/font-awesome.css",
               "src/styles.less",
-              "src/CodeMirror/addon/fold/foldgutter.css",
-              "src/CodeMirror/theme/eclipse.css"
+              "node_modules/CodeMirror/addon/fold/foldgutter.css",
+              "node_modules/CodeMirror/theme/eclipse.css"
             ],
             "scripts": [
               "src/script.js",
-              "src/CodeMirror/lib/codemirror.js",
-              "src/CodeMirror/addon/fold/foldcode.js",
-              "src/CodeMirror/addon/fold/foldgutter.js",
-              "src/CodeMirror/addon/fold/brace-fold.js",
-              "src/CodeMirror/addon/selection/active-line.js",
-              "src/CodeMirror/mode/javascript/javascript.js"
+              "node_modules/CodeMirror/lib/codemirror.js",
+              "node_modules/CodeMirror/addon/fold/foldcode.js",
+              "node_modules/CodeMirror/addon/fold/foldgutter.js",
+              "node_modules/CodeMirror/addon/fold/brace-fold.js",
+              "node_modules/CodeMirror/addon/selection/active-line.js",
+              "node_modules/CodeMirror/mode/javascript/javascript.js"
             ]
           },
           "configurations": {

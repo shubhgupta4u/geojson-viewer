@@ -1,13 +1,40 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
 <div class="body-container">
-  <as-split direction="horizontal">
-    <as-split-area size="60">
-    <app-map></app-map>
+  <as-split direction="horizontal" (dragStart)="onSpilterDragStart($event)" unit="percent" (dragEnd)="onSpilterDragEnd($event)">
+    <as-split-area [(size)]="leftAreaSize" [minSize]="minAreaSize" [maxSize]="maxAreaSize">
+      <div class="left-container">
+        <app-map [class.hide]="isMapMinimize"></app-map>
+        <div class="minimize-map" [class.minimize]="isMapMinimize">
+          <div><button class="primary" (click)="onMapCollapeBtnClicked()" *ngIf="!isMapMinimize">
+              <i class="fa fa-hand-o-left" title="Collapse Map View" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="vertical-text" (click)="onMapCollapeBtnClicked()" *ngIf="isMapMinimize">
+              <div class="vertical-text-map">
+                  MAP
+              </div>
+            </div>
+        </div>
+      </div>
     </as-split-area>
-    <as-split-area size="40">
-      <app-editor></app-editor>
+    <as-split-area [(size)]="rightAreaSize" [minSize]="minAreaSize" [maxSize]="maxAreaSize">
+      <div class="right-container">
+        <app-editor [class.hide]="isEditorMinimize"></app-editor>
+        <div class="minimize-editor" [class.minimize]="isEditorMinimize">
+          <div><button class="primary" (click)="onEditorCollapeBtnClicked()"  *ngIf="!isEditorMinimize">
+              <i class="fa fa-hand-o-right" title="Collapse Editor View"
+                aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="vertical-text" (click)="onEditorCollapeBtnClicked()" *ngIf="isEditorMinimize">
+            <div class="vertical-text-editor">
+              EDITOR
+            </div>
+          </div>
+        </div>
+      </div>
     </as-split-area>
-</as-split>
+  </as-split>
 </div>
 <!-- <router-outlet></router-outlet> -->

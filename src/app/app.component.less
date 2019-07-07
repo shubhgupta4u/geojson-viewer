@@ -3,7 +3,41 @@ div.body-container{
     height: 100vh ;
     width: 100%;
 }
-// #map {
-//     height: calc(100vh - 16px) ;  /* The height is 400 pixels */
-//     //width: 100vw;  /* The width is the width of the web page */
-//    }
+div.left-container, div.right-container{
+    position: relative;
+}
+div.minimize-editor, div.minimize-map{
+    height: 100vh ;
+    position: absolute;
+    top: 0;
+    width:32px;
+    min-width: 32px;
+    max-width: 32px;    
+}
+div.minimize{
+    background-color: #F0F0F0;
+}
+div.minimize-editor{
+    left: 0;
+}
+div.minimize-map{
+    right: 0;
+}
+.vertical-text{
+    height: calc(100% - 30px);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    z-index: 0;
+}
+.vertical-text-map {
+	transform: rotate(-90deg);
+    width: 30px;
+    font-weight: bold;
+    margin-top:30px;
+}
+.vertical-text-editor {
+	transform: rotate(90deg);
+    width: 30px;
+    font-weight: bold;
+}

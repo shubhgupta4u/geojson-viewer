@@ -8,7 +8,14 @@ import {} from 'googlemaps';
 })
 export class AppComponent implements OnInit {
   title = 'geojson-viewer';
-
+  private defaultRightAreaSize = 40;
+  private defaultLeftAreaSize = 60;
+  minAreaSize:number = 2.3;
+  maxAreaSize:number = 97.7;
+  rightAreaSize:number=this.defaultRightAreaSize;
+  leftAreaSize:number=this.defaultLeftAreaSize;
+  isEditorMinimize:boolean = false;
+  isMapMinimize:boolean=false;
   ngOnInit() {
     let mapOptions: google.maps.MapOptions = { center: { lat: -25.363, lng: 131.044 }, zoom: 4};
     let mapOptions1: google.maps.MapOptions = {
@@ -47,5 +54,52 @@ export class AppComponent implements OnInit {
     };
     /***** Create map *****/
     let map: google.maps.Map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  }
+  onSpilterDragStart(event){
+    if(this.isMapMinimize)
+    {
+      this.isMapMinimize = false;
+    }
+    if(this.isEditorMinimize){
+      this.isEditorMinimize = false;
+    }
+    console.log('onSpilterDragStart');
+    console.log(event);
+  }
+  onSpilterDragEnd(event){
+    console.log('onSpilterDragEnd');
+    console.log(event);
+    this.leftAreaSize=event.sizes[0];
+    this.rightAreaSize=event.sizes[1];
+    if(event.sizes[0] == this.minAreaSize && !this.isMapMinimize){
+      this.isMapMinimize = true;
+    }
+    if(event.sizes[1] == this.minAreaSize && !this.isEditorMinimize){
+      this.isEditorMinimize = true;
+    }
+  }
+  onMapCollapeBtnClicked(){
+    this.isMapMinimize=!this.isMapMinimize;
+    if(this.isMapMinimize){
+      this.rightAreaSize = this.maxAreaSize;
+      this.leftAreaSize = this.minAreaSize;
+      this.isEditorMinimize = false;
+    }
+    else{
+      this.rightAreaSize = this.defaultRightAreaSize;
+      this.leftAreaSize = this.defaultRightAreaSize;
+    }
+  }
+  onEditorCollapeBtnClicked(){
+    this.isEditorMinimize=!this.isEditorMinimize;
+    if(this.isEditorMinimize){
+      this.rightAreaSize = this.minAreaSize;
+      this.leftAreaSize =this.maxAreaSize;
+      this.isMapMinimize = false;
+    }
+    else{
+      this.rightAreaSize = this.defaultRightAreaSize;
+      this.leftAreaSize = this.defaultRightAreaSize;
+    }
   }
 }
