@@ -1,20 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FeatureCollection } from 'geojson-parser-js/models/geojson';
 import { GeometryType, FeatureProperty, Coordinate, Geometry, Point, LineString, Polygon, PolygonWithHole, MultiPoint, MultiLineString, MultiPolygon } from 'geojson-parser-js/models/geojson';
+import { AgGridAngular } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.less']
+  styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
+
+  @ViewChild('agGrid', { static: true }) agGrid: AgGridAngular;
+
   drawnShapes: Array<any>;
   map: google.maps.Map;
-  bounds:google.maps.LatLngBounds;
+  bounds: google.maps.LatLngBounds;
   mapOptions: google.maps.MapOptions = {
-    center: { lat: -25.363, lng: 131.044 }, zoom: 4, fullscreenControl: true,
-    fullscreenControlOptions: {
-      position: google.maps.ControlPosition.RIGHT_BOTTOM
+    center: { lat: -25.363, lng: 131.044 },
+    zoom: 4, controlSize: 25,
+    fullscreenControl: false,
+    signInControl: false,
+    streetViewControl: false,
+    rotateControl: false,
+    gestureHandling: 'cooperative',
+    scrollwheel: true,
+    zoomControl: true,
+    zoomControlOptions: {
+      position: google.maps.ControlPosition.LEFT_TOP,
+      style: google.maps.ZoomControlStyle.SMALL
     },
   };
   markerOption: google.maps.MarkerOptions = {
@@ -31,6 +44,10 @@ export class MapComponent implements OnInit {
     strokeWeight: 2,
     fillOpacity: 0.35
   };
+
+  columnDefs: any = [];
+  rowData: any = [];
+
   constructor() { }
 
   ngOnInit() {
@@ -40,12 +57,20 @@ export class MapComponent implements OnInit {
       clickableIcons: true,
       controlSize: 30,
       draggable: true,
-      fullscreenControl: true,
+      fullscreenControl: false,
+      signInControl: false,
+      streetViewControl: false,
+      rotateControl: false,
       fullscreenControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
+        position: google.maps.ControlPosition.RIGHT_TOP
       },
       gestureHandling: 'cooperative',
       scrollwheel: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_TOP,
+        style: google.maps.ZoomControlStyle.SMALL
+      },
       styles: [
         {
           elementType: 'geometry',
@@ -80,6 +105,41 @@ export class MapComponent implements OnInit {
     }
     this.drawnShapes = new Array<any>();
     this.drawShape(features.geometries)
+    this.populateAttributes(features.geometries);
+  }
+  populateAttributes(geometries: Array<Geometry>) {
+    let _columnDefs = [];
+    let _rowDataArray = [];
+    if (geometries && geometries.length) {
+      _columnDefs.push({ headerName: 'Id', field: 'Id', sortable: true, filter: true, width: 70 });
+      let index = 0;
+      geometries.forEach((geometry: Geometry) => {
+        let _rowData = {};
+        if (geometry.featureProperties && geometry.featureProperties.length > 0) {
+          _rowData['Id'] = index + 1;
+          let count = 1;
+          if (geometry instanceof MultiPolygon && geometry.polygons.length > 0){
+            count = geometry.polygons.length;
+          } else if(geometry instanceof MultiLineString && geometry.LinesString.length > 0) {
+            count = geometry.LinesString.length;
+          }
+          while(count > 0){
+            geometry.featureProperties.forEach((property: FeatureProperty) => {
+              let field: string = property.key.replace(' ', '');
+              if (index == 0) {
+                _columnDefs.push({ headerName: property.key, field: field, sortable: true, filter: true });
+              }
+              _rowData[field] = property.value;
+            });
+            index = index + 1;
+            _rowDataArray.push(_rowData);
+            count =count-1;
+          }         
+        }
+      });
+    }
+    this.columnDefs = _columnDefs;
+    this.rowData = _rowDataArray;
   }
   onMapViewResest() {
     if (this.drawnShapes && this.drawnShapes.length > 0) {
@@ -89,6 +149,7 @@ export class MapComponent implements OnInit {
     }
     this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
     this.drawnShapes = new Array<any>();
+    this.rowData = [];
   }
   drawShape(geometries: Array<Geometry>) {
     this.bounds = new google.maps.LatLngBounds();
@@ -100,7 +161,13 @@ export class MapComponent implements OnInit {
       } else if (geometry instanceof LineString) {
         this.drawLine(geometry);
       }
-    });    
+      else if (geometry instanceof MultiPolygon) {
+        this.drawMultiPolygon(geometry);
+      }
+      else if (geometry instanceof MultiLineString) {
+        this.drawMultiLine(geometry);
+      }
+    });
     this.map.fitBounds(this.bounds);
   }
   drawPoint(point: Point) {
@@ -111,7 +178,7 @@ export class MapComponent implements OnInit {
       let latLngs: google.maps.MVCArray<google.maps.LatLng> = new google.maps.MVCArray<google.maps.LatLng>();
       latLngs.push(new google.maps.LatLng(point.coordinate.lat, point.coordinate.lng));
       this.setBound(latLngs);
-      this.drawnShapes.push(marker);
+      this.addShape(marker);
     }
   }
   drawLine(line: LineString) {
@@ -124,7 +191,7 @@ export class MapComponent implements OnInit {
       polyLine.setPath(latLngs)
       polyLine.setMap(this.map);
       this.setBound(latLngs);
-      this.drawnShapes.push(polyLine);
+      this.addShape(polyLine);
     }
   }
   drawPolygon(polygon: Polygon) {
@@ -137,12 +204,41 @@ export class MapComponent implements OnInit {
       polygonShape.setPath(latLngs)
       polygonShape.setMap(this.map);
       this.setBound(latLngs);
-      this.drawnShapes.push(polygonShape);
+      this.addShape(polygonShape);
     }
   }
-  setBound(latLngs: google.maps.MVCArray<google.maps.LatLng>){ 
-    latLngs.forEach((item)=>{
+  drawMultiLine(multiLine: MultiLineString) {
+    if (multiLine.LinesString && multiLine.LinesString.length > 0) {
+      multiLine.LinesString.forEach((line: LineString) => {
+        this.drawLine(line);
+      });
+    }
+  }
+  drawMultiPolygon(multipolygon: MultiPolygon) {
+    if (multipolygon.polygons && multipolygon.polygons.length > 0) {
+      multipolygon.polygons.forEach((polygon: Polygon) => {
+        this.drawPolygon(polygon);
+      });
+    }
+  }
+  setBound(latLngs: google.maps.MVCArray<google.maps.LatLng>) {
+    latLngs.forEach((item) => {
       this.bounds.extend(item);
     });
+  }
+  onReady(params) {
+    this.agGrid = params;
+  }
+  addShape(shape: any) {
+    let self = this;
+    shape.addListener('click', function () {
+      let index = self.drawnShapes.indexOf(this);
+      if (index >= 0 && self.agGrid && self.rowData && self.rowData.length > index) {
+        self.agGrid.api.forEachNode(node => (node.rowIndex == index) ? node.setSelected(true) : 0);
+        self.agGrid.api.ensureIndexVisible(index, 'top');
+      }
+    });
+
+    this.drawnShapes.push(shape);
   }
 }

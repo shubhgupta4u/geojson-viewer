@@ -100,6 +100,7 @@ export class UploadFileComponent implements OnInit {
       }        
     }
     fileReader.readAsText(file);
+    $('#geojsonFileInput').val(''); 
   }
   resetEditornClearMap() {
     this.onResetRequested.emit();

@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {MatTabsModule} from '@angular/material/tabs';
 import { UploadFileComponent } from './components/editor/upload-file/upload-file.component';
+import { AgGridModule } from 'ag-grid-angular';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +28,8 @@ import { UploadFileComponent } from './components/editor/upload-file/upload-file
     FormsModule,
     AngularSplitModule.forRoot(),
     BrowserAnimationsModule,
-    MatTabsModule
+    MatTabsModule,
+    AgGridModule.withComponents([])
   ],
   providers: [],
   bootstrap: [AppComponent]
