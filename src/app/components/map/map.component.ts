@@ -15,7 +15,7 @@ export class MapComponent implements OnInit {
   drawnShapes: Array<any>;
   map: google.maps.Map;
   bounds: google.maps.LatLngBounds;
-  mapOptions: google.maps.MapOptions = {
+  mapOptions:any = {
     center: { lat: -25.363, lng: 131.044 },
     zoom: 4, controlSize: 25,
     fullscreenControl: false,
@@ -25,10 +25,19 @@ export class MapComponent implements OnInit {
     gestureHandling: 'cooperative',
     scrollwheel: true,
     zoomControl: true,
+    minZoom:3,
     zoomControlOptions: {
       position: google.maps.ControlPosition.LEFT_TOP,
       style: google.maps.ZoomControlStyle.SMALL
     },
+    restriction:{
+      latLngBounds:{
+        north:85,
+        south:-85,
+        west:-179.9,
+        east:179.9
+      }
+    }
   };
   markerOption: google.maps.MarkerOptions = {
   };
@@ -50,49 +59,7 @@ export class MapComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    let mapOptions1: google.maps.MapOptions = {
-      backgroundColor: '#fff',
-      center: { lat: -25.363, lng: 131.044 },
-      clickableIcons: true,
-      controlSize: 30,
-      draggable: true,
-      fullscreenControl: false,
-      signInControl: false,
-      streetViewControl: false,
-      rotateControl: false,
-      fullscreenControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_TOP
-      },
-      gestureHandling: 'cooperative',
-      scrollwheel: true,
-      zoomControl: true,
-      zoomControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_TOP,
-        style: google.maps.ZoomControlStyle.SMALL
-      },
-      styles: [
-        {
-          elementType: 'geometry',
-          featureType: 'water',
-          stylers: [
-            {
-              color: '#00bdbd'
-            }
-          ]
-        },
-        {
-          elementType: 'geometry',
-          featureType: 'landscape.man_made',
-          stylers: [
-            {
-              color: '#f7f1df'
-            }
-          ]
-        }
-      ],
-      zoom: 4
-    };
+  ngOnInit() {    
     /***** Create map *****/
     this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
   }
@@ -114,9 +81,8 @@ export class MapComponent implements OnInit {
       _columnDefs.push({ headerName: 'Id', field: 'Id', sortable: true, filter: true, width: 70 });
       let index = 0;
       geometries.forEach((geometry: Geometry) => {
-        let _rowData = {};
-        if (geometry.featureProperties && geometry.featureProperties.length > 0) {
-          _rowData['Id'] = index + 1;
+    
+        if (geometry.featureProperties && geometry.featureProperties.length > 0) {      
           let count = 1;
           if (geometry instanceof MultiPolygon && geometry.polygons.length > 0){
             count = geometry.polygons.length;
@@ -124,6 +90,8 @@ export class MapComponent implements OnInit {
             count = geometry.LinesString.length;
           }
           while(count > 0){
+            let _rowData = {};
+            _rowData['Id'] = index + 1;
             geometry.featureProperties.forEach((property: FeatureProperty) => {
               let field: string = property.key.replace(' ', '');
               if (index == 0) {
