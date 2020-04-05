@@ -6,11 +6,11 @@
       <div class="left-container">
         <app-map #mapView [class.hide]="isMapMinimize"></app-map>
         <div class="minimize-map" [class.minimize]="isMapMinimize">
-          <div><button class="primary" (click)="onMapCollapeBtnClicked()" *ngIf="!isMapMinimize">
-              <i class="fa fa-hand-o-left" matTooltip="Collapse Map View" aria-hidden="true"></i>
+          <div><button class="primary" matTooltip="Collapse Map View" (click)="onMapCollapeBtnClicked()" *ngIf="!isMapMinimize">
+              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
             </button>
           </div>
-          <div class="vertical-text" matTooltip="Expand Map View" (click)="onMapCollapeBtnClicked()" *ngIf="isMapMinimize">
+          <div class="vertical-text" matTooltip="Expand Map View" matTooltipPosition="after" (click)="onMapCollapeBtnClicked()" *ngIf="isMapMinimize">
               <div class="vertical-text-map">
                   MAP
               </div>
@@ -24,12 +24,12 @@
           (onGeoJsonChange)="onGeoJsonChange($event)"
           (onResetRequest)="onResetRequest()"></app-editor>
         <div class="minimize-editor" [class.minimize]="isEditorMinimize">
-          <div><button class="primary" (click)="onEditorCollapeBtnClicked()"  *ngIf="!isEditorMinimize">
-              <i class="fa fa-hand-o-right" matTooltip="Collapse Editor View"
+          <div><button class="primary" matTooltip="Collapse Editor View" (click)="onEditorCollapeBtnClicked()"  *ngIf="!isEditorMinimize">
+              <i class="fa fa-hand-o-right" 
                 aria-hidden="true"></i>
             </button>
           </div>
-          <div class="vertical-text" matTooltip="Expand Editor View" (click)="onEditorCollapeBtnClicked()" *ngIf="isEditorMinimize">
+          <div class="vertical-text" matTooltip="Expand Editor View" matTooltipPosition="before" (click)="onEditorCollapeBtnClicked()" *ngIf="isEditorMinimize">
             <div class="vertical-text-editor">
               EDITOR
             </div>

@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter, Output} from '@angular/core';
 import { HttpServiceService } from 'src/app/services/http-service.service';
 import * as $ from 'jquery';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-upload-file',
@@ -10,11 +12,37 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class UploadFileComponent implements OnInit {
   geoJsonUrl: string;
+  isbusy:boolean=false;
+
   @Output() onfileUploaded = new EventEmitter<string>();
   @Output() onResetRequested = new EventEmitter();
-  dropArea:any;
 
-  constructor(private httpService: HttpServiceService) { }
+  dropArea:any;
+  selectedVectorMap:string;
+  durationInSeconds = 5;
+
+  constructor(private httpService: HttpServiceService,private _snackBar: MatSnackBar) { }
+  openCovidVectorMap(event:MatButtonToggleChange){
+    this.isbusy = true;
+    this.selectedVectorMap = event.value
+    var url = 'https://covid19-data.p.rapidapi.com/' + this.selectedVectorMap;
+    this.httpService.getCovidGeoJSONByUrl(url).subscribe(
+      (data: string) => {
+        let geojson: string =JSON.stringify(data, null, "\t");
+        this.onfileUploaded.emit(geojson);
+        event.source.buttonToggleGroup.writeValue(undefined);
+        this.isbusy = false;
+      }, // success path
+      error => { 
+        if(error && error instanceof HttpErrorResponse && error.status == 404){
+          this.openMessageBox('Requested resource is not available. Kindly verify your entered URL.'); 
+        }else{
+          this.openMessageBox('We are not able to access the requested resource at the moment. kindly try after sometime.'); 
+        }  
+        this.isbusy = false;     
+      }// error path
+    );
+  }
   initialize(){
     if(!this.dropArea){
       var self = this;
@@ -69,24 +97,28 @@ export class UploadFileComponent implements OnInit {
       else if (!this.geoJsonUrl.startsWith("http://") && !this.geoJsonUrl.startsWith("https://") && !this.geoJsonUrl.startsWith("www.")) {
         this.geoJsonUrl = "http://www." + this.geoJsonUrl;
       }
+      this.isbusy = true;
       this.httpService.getGeoJSONByUrl(this.geoJsonUrl).subscribe(
         (data: string) => {
           let geojson: string =JSON.stringify(data, null, "\t");
           this.onfileUploaded.emit(geojson);
+          this.selectedVectorMap ='';
+          this.isbusy = false;
         }, // success path
         error => { 
           if(error && error instanceof HttpErrorResponse && error.status == 0){
-            alert('We are not able to access the requested resource due to CORS Policy at the target server.'); 
+            this.openMessageBox('We are not able to access the requested resource. Kindly make sure the URL is valid and this application is added into the CORS policy of the requested resource.'); 
           } else if(error && error instanceof HttpErrorResponse && error.status == 404){
-            alert('Requested resource is not available. Kindly verify your entered URL.'); 
+            this.openMessageBox('Requested resource is not available. Kindly verify your entered URL.'); 
           }else{
-            alert('We are not able to access the requested resource'); 
-          }       
+            this.openMessageBox('We are not able to access the requested resource.'); 
+          }  
+          this.isbusy = false;     
         }// error path
       );
     }
     else {
-      alert('Invalid URL');
+      this.openMessageBox('Entered URL is not in valid format.');
     }
   }
   openFileDialog() {
@@ -101,6 +133,7 @@ export class UploadFileComponent implements OnInit {
   }
   readUploadedFile(file:any){
     let fileReader = new FileReader();
+    this.isbusy = true;
     fileReader.onload = (e) => {
       let geojsonObj:any = JSON.parse(fileReader.result.toString());
       if(geojsonObj){
@@ -109,7 +142,9 @@ export class UploadFileComponent implements OnInit {
         //  this.addCovidCountryData(geojsonObj);
         let geojson: string =JSON.stringify(geojsonObj, null, "\t");
         this.onfileUploaded.emit(geojson);
-      }        
+        this.selectedVectorMap ='';
+      } 
+      this.isbusy = false;       
     }
     fileReader.readAsText(file);
     $('#geojsonFileInput').val(''); 
@@ -242,5 +277,9 @@ export class UploadFileComponent implements OnInit {
   }
   resetEditornClearMap() {
     this.onResetRequested.emit();
+    this.selectedVectorMap ='';
+  }
+  openMessageBox(message) {
+    this._snackBar.open(message, 'Ok');
   }
 }

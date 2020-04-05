@@ -7,11 +7,18 @@ import { HttpClient } from '@angular/common/http'
 export class HttpServiceService {
 
   constructor(private http: HttpClient) { }
-
-  getGeoJSONByUrl(url:string) {
+  getCovidGeoJSONByUrl(url: string) {
     return this.http.get(url
-      //,{headers: {'Access-Control-Allow-Origin': '*' } }
-      );
+      , {
+        headers: {
+          "x-rapidapi-host": "covid19-data.p.rapidapi.com",
+          "x-rapidapi-key": "S1lPd3tDJgmshwvS3P2ijOpXs1tpp15vp7OjsnlVONTrdpBH7T"
+        }
+      }
+    );
+  }
+  getGeoJSONByUrl(url:string) {
+    return this.http.get(url);
   }
   getCovidUSData(){
     return this.http.get("https://sg-covid19.herokuapp.com/api/us")

@@ -17,6 +17,8 @@ declare var CodeMirror;
 export class EditorComponent implements OnInit{
   editor:any;
   code:string ='';
+  isEditorInitialized:boolean =false;
+
   selectedTabIndex:number = 0;
   @Output() onGeoJsonChange = new EventEmitter<FeatureCollection>();
   @Output() onResetRequest = new EventEmitter();
@@ -30,9 +32,9 @@ export class EditorComponent implements OnInit{
     }
   }
   onfileUploaded(geojson){
-    this.code =geojson;
-    this.editor.setValue(this.code);   
-    this.selectedTabIndex = 0;
+      this.code =geojson;
+      this.editor.setValue(this.code);   
+      this.selectedTabIndex = 0;    
   }
   geoJsonChanged(features:FeatureCollection){
       this.onGeoJsonChange.emit(features);
@@ -44,27 +46,33 @@ export class EditorComponent implements OnInit{
     this.selectedTabIndex = 0;
   }
   ngOnInit() {
-    var self=this;
-    $(document).ready(function(){     
-      var te = $('#code')[0];
-      self.editor = CodeMirror.fromTextArea(te, {
-        mode: {name: "javascript", json: true},
-        theme:"eclipse",
-        lineNumbers: true, 
-        styleActiveLine: true,
-        matchBrackets: true,
-        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor(), CodeMirror.braceRangeFinder); }},
-        foldGutter: true,
-        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-      });
-      self.editor.foldCode(CodeMirror.Pos(0, 0));
-      self.editor.setValue(self.code);
-      self.editor.on('change',function(cMirror){
-        // get value right from instance
-        self.code = cMirror.getValue();
-        let features:FeatureCollection = Geojson.parse(self.code);
-        self.geoJsonChanged(features);
-      });
+    var self = this;
+    $(document).ready(function () {
+      self.initializeEditor(self);
     });
+
+  }
+  initializeEditor(self){
+    var te = $('#code')[0];
+    self.editor = CodeMirror.fromTextArea(te, {
+      mode: {name: "javascript", json: true},
+      theme:"eclipse",
+      lineNumbers: true, 
+      styleActiveLine: true,
+      matchBrackets: true,
+      extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor(), CodeMirror.braceRangeFinder); }},
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+    self.editor.foldCode(CodeMirror.Pos(0, 0));
+    self.editor.setValue(self.code);
+    self.editor.on('change',function(cMirror){
+      // get value right from instance
+      self.code = cMirror.getValue();
+      let features:FeatureCollection = Geojson.parse(self.code);
+      self.geoJsonChanged(features);
+    });
+    self.isEditorInitialized = true;
+    self.selectedTabIndex =1;
   }
 }

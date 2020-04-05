@@ -1,29 +1,84 @@
-<div class="card" style="margin: 10px;">
-  <div class="card-body">
-    <h5 class="card-title">Option 1: GeoJSON Url:</h5>
-    <div>
-      <input id="geojson-url" placeholder="http://" [(ngModel)]="geoJsonUrl" type="text" class="" />
-      <button class="btn btn-primary" (click)="getGeoJSONByUrl()">Go</button>
+<mat-progress-bar *ngIf="isbusy" mode="indeterminate"></mat-progress-bar>
+<div>
+  <div class="card" style="margin: 10px;">
+    <div class="card-body">
+      <h5 class="card-title">Option 1: GeoJSON Url:</h5>
+      <div>
+        <input id="geojson-url" placeholder="http://" [(ngModel)]="geoJsonUrl" type="text" class="" />
+        <button class="btn btn-primary" (click)="getGeoJSONByUrl()">Go</button>
+      </div>
     </div>
   </div>
-</div>
-<div id="droparea" class="card" style="margin: 10px; margin-top: 0">
-  <div class="card-body">
-    <h5 class="card-title">Option 2: GeoJSON file Upload:</h5>
-    <div>
-      <span class="upload-icon" (click)="openFileDialog()" matTooltip="Upload GeoJSON"><i class="fa fa-upload"></i> Choose a
-        GeoJSON File or drag it here</span>
+  <div id="droparea" class="card" style="margin: 10px; margin-top: 0">
+    <div class="card-body">
+      <h5 class="card-title">Option 2: GeoJSON file Upload:</h5>
+      <div>
+        <span class="upload-icon" (click)="openFileDialog()" matTooltip="Upload GeoJSON"><i class="fa fa-upload"></i>
+          Choose a
+          GeoJSON File or drag it here</span>
 
-      <input #fileInput id="geojsonFileInput" type="file" accept="application/json,application/geo+json" 
-            hidden="" (change)="onFileChange($event)">
+        <input #fileInput id="geojsonFileInput" type="file" accept="application/json,application/geo+json" hidden=""
+          (change)="onFileChange($event)">
+      </div>
     </div>
   </div>
-</div>
-<div class="card" style="margin: 10px; margin-top: 0">
-  <div class="card-body">
-    <h5 class="card-title">Reset Editor &amp; Clear map:</h5>
-    <div>
-      <button class="btn btn-primary" (click)="resetEditornClearMap()">Clear</button>
+  <div class="card" style="margin: 10px; margin-top: 0">
+    <div class="card-body">
+      <h5 class="card-title">Reset Editor &amp; Clear map:</h5>
+      <div>
+        <button class="btn btn-primary" (click)="resetEditornClearMap()">Clear</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin: 10px; margin-top: 0">
+    <div class="card-body">
+      <h5 class="card-title">Covid-19 Data Vector Map:</h5>
+      <div style="overflow: hidden;">
+        <mat-button-toggle-group style="flex-wrap: wrap;" (change)="openCovidVectorMap($event)">
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-us'" value="geojson-us"
+            aria-label="USA">
+            USA
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-in'" value="geojson-in"
+            aria-label="India">
+            India
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-ww'" value="geojson-ww"
+            aria-label="World">
+            World
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-eu'" value="geojson-eu"
+            aria-label="Europe">
+            Europe
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-as'" value="geojson-as"
+            aria-label="Asia">
+            Asia
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-af'" value="geojson-af"
+            aria-label="Africa">
+            Africa
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group style="flex-wrap: wrap;" (change)="openCovidVectorMap($event)">
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-na'" value="geojson-na"
+            aria-label="America">
+            North America
+          </mat-button-toggle>
+          <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-sa'" value="geojson-sa"
+            aria-label="America">
+            South America
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin: 10px; margin-top: 0">
+    <div class="card-body">
+      <div>
+        This Application is designed and developed by <a href="https://www.linkedin.com/in/shubh-gupta-63607313/"
+          target="_blank">Mr. Shubh Gupta</a>.
+      </div>
     </div>
   </div>
 </div>

@@ -14,6 +14,9 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { UploadFileComponent } from './components/editor/upload-file/upload-file.component';
 import { AgGridModule } from 'ag-grid-angular';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     BrowserAnimationsModule,
     MatTabsModule,
     MatTooltipModule,
+    MatButtonToggleModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
     AgGridModule.withComponents([])
   ],
   providers: [],
