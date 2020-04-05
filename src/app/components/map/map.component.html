@@ -1,13 +1,20 @@
-<div id="map"></div>
-<div *ngIf="rowData && rowData.length > 0" style="position: absolute;bottom:0;left:0;width:100%;z-index: 99;">
-    <ag-grid-angular style="overflow-y: auto;height:200px;"
-    #agGrid
-    rowHeight="22"
-    (gridReady)="onReady($event)"
-    class="ag-theme-balham"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
-    rowSelection="single"
-    >
-</ag-grid-angular>
+<div id="map" class="no-data-grid" [class.show-collapse-grid]="rowData && rowData.length > 0 && !showDataGrid"
+    [class.show-data-grid]="showDataGrid"></div>
+<div *ngIf="rowData && rowData.length > 0" class="data-grid-container">
+    <div class="data-grid-header" (click)="toggleDataGrid()">
+        <div class="row">
+            <div class="col-8">
+                <span class="title">Feature Properties</span>
+            </div>
+            <div class="col-4" style="text-align: right;">
+                <i [class.arrow-down]="showDataGrid" class="fa fa-angle-up arrow-down"
+                    style="padding-right: 30px;padding-left: 30px;" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <ag-grid-angular [class.hide-ag-grid]="!showDataGrid" class="show-ag-grid" id="agGrid" style="overflow-y: auto;height:170px;" #agGrid
+        rowHeight="22" (gridReady)="onReady($event)" class="ag-theme-balham" [rowData]="rowData"
+        [defaultColDef]="defaultColDef" [columnDefs]="columnDefs" (rowClicked)="dataRowClicked($event)"
+        rowSelection="single">
+    </ag-grid-angular>
 </div>

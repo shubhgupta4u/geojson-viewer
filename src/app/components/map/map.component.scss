@@ -1,3 +1,49 @@
-#map{
+.no-data-grid{
     height: 100vh;
+    transition: width 1s, height 1s, transform 1s;
+}
+.show-collapse-grid{
+    height: calc(100vh - 30px);
+    transition: width 1s, height 1s, transform 1s;
+}
+.show-data-grid{
+    height: calc(100vh - 200px);
+    transition: width 1s, height 1s, transform 1s;
+}
+.show-ag-grid{
+    height: 170px;
+    transition: width 1s, height 1s, transform 1s;
+    transition-timing-function: ease-in-out;
+}
+.hide-ag-grid{
+    height: 0;
+    transition: width 1s, height 1s, transform 1s;
+    transition-timing-function: ease-in-out;
+}
+.arrow-up{
+    transform: rotate(0deg);
+    transition: width 1s, height 1s, transform 1s;
+    transition-timing-function: ease-in-out;
+}
+.arrow-down{
+    transform: rotate(180deg);
+    transition: width 1s, height 1s, transform 1s;
+    transition-timing-function: ease-in-out;
+}
+.data-grid-container{
+    width:100%;
+    z-index: 99;
+    font-size: 14px;
+    transition: width 1s, height 1s, transform 1s;
+}
+.row{
+    padding-top: 5px;
+    padding-left: 10px;
+}
+.data-grid-header{
+    height: 30px;
+    width:100%;
+    background-color: #3f51b5;
+    color: white;
+    cursor: pointer;
 }

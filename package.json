@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
     "@types/googlemaps": "^3.36.4",
+    "@types/jquery": "^3.3.34",
     "ag-grid-angular": "^21.1.0",
     "ag-grid-community": "^21.1.1",
     "angular-split": "^3.0.1",

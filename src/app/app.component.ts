@@ -31,12 +31,8 @@ export class AppComponent implements OnInit {
     if(this.isEditorMinimize){
       this.isEditorMinimize = false;
     }
-    console.log('onSpilterDragStart');
-    console.log(event);
   }
   onSpilterDragEnd(event){
-    console.log('onSpilterDragEnd');
-    console.log(event);
     this.leftAreaSize=event.sizes[0];
     this.rightAreaSize=event.sizes[1];
     if(event.sizes[0] == this.minAreaSize && !this.isMapMinimize){

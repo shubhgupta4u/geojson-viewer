@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {MatTabsModule} from '@angular/material/tabs';
 import { UploadFileComponent } from './components/editor/upload-file/upload-file.component';
 import { AgGridModule } from 'ag-grid-angular';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { AgGridModule } from 'ag-grid-angular';
     AngularSplitModule.forRoot(),
     BrowserAnimationsModule,
     MatTabsModule,
+    MatTooltipModule,
     AgGridModule.withComponents([])
   ],
   providers: [],

@@ -37,6 +37,7 @@
             ],
             "scripts": [
               "src/script.js",
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/CodeMirror/lib/codemirror.js",
               "node_modules/CodeMirror/addon/fold/foldcode.js",
               "node_modules/CodeMirror/addon/fold/foldgutter.js",
