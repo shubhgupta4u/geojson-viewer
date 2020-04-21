@@ -241,7 +241,7 @@ export class UploadFileComponent implements OnInit {
         geojsonObj.features.forEach((geometry) => {
           let state = geometry.properties.NAME;
           let stateCovidData = covidData.filter(d=> {
-            return (d["state"] == state);
+            return (d["state"].toLowerCase() == state.toLowerCase());
           });
           if(stateCovidData && stateCovidData.length == 1){        
             geometry.properties["geo_id"] = geometry.properties["GEO_ID"];
@@ -254,7 +254,7 @@ export class UploadFileComponent implements OnInit {
           }
           else{
             geometry.properties["geo_id"] = geometry.properties["GEO_ID"];
-            geometry.properties["name"] = stateCovidData[0].state;
+            geometry.properties["name"] = state;
             geometry.properties["censusarea"] = geometry.properties["CENSUSAREA"];
             geometry.properties["latitude"] = "";
             geometry.properties["longitude"] = "";

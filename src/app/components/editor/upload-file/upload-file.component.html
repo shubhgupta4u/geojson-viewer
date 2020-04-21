@@ -2,7 +2,7 @@
 <div>
   <div class="card" style="margin: 10px;">
     <div class="card-body">
-      <h5 class="card-title">Option 1: GeoJSON Url:</h5>
+      <h1 class="card-title">Option 1: GeoJSON Url:</h1>
       <div>
         <input id="geojson-url" placeholder="http://" [(ngModel)]="geoJsonUrl" type="text" class="" />
         <button class="btn btn-primary" (click)="getGeoJSONByUrl()">Go</button>
@@ -11,7 +11,7 @@
   </div>
   <div id="droparea" class="card" style="margin: 10px; margin-top: 0">
     <div class="card-body">
-      <h5 class="card-title">Option 2: GeoJSON file Upload:</h5>
+      <h1 class="card-title">Option 2: GeoJSON file Upload:</h1>
       <div>
         <span class="upload-icon" (click)="openFileDialog()" matTooltip="Upload GeoJSON"><i class="fa fa-upload"></i>
           Choose a
@@ -24,7 +24,7 @@
   </div>
   <div class="card" style="margin: 10px; margin-top: 0">
     <div class="card-body">
-      <h5 class="card-title">Reset Editor &amp; Clear map:</h5>
+      <h1 class="card-title">Reset Editor &amp; Clear map:</h1>
       <div>
         <button class="btn btn-primary" (click)="resetEditornClearMap()">Clear</button>
       </div>
@@ -32,9 +32,9 @@
   </div>
   <div class="card" style="margin: 10px; margin-top: 0">
     <div class="card-body">
-      <h5 class="card-title">Covid-19 Data Vector Map:</h5>
+      <h1 class="card-title">Covid-19 Data Vector Map:</h1>
       <div style="overflow: hidden;">
-        <mat-button-toggle-group style="flex-wrap: wrap;" (change)="openCovidVectorMap($event)">
+        <mat-button-toggle-group style="flex-wrap: wrap; margin-right: 10px;" (change)="openCovidVectorMap($event)">
           <mat-button-toggle [class.btn-primary]="selectedVectorMap == 'geojson-us'" value="geojson-us"
             aria-label="USA">
             USA

@@ -48,10 +48,12 @@ export class AppComponent implements OnInit {
       this.rightAreaSize = this.maxAreaSize;
       this.leftAreaSize = this.minAreaSize;
       this.isEditorMinimize = false;
+      $('.minimize-map').height('100vh');
     }
     else{
       this.rightAreaSize = this.defaultRightAreaSize;
       this.leftAreaSize = this.defaultLeftAreaSize;
+      $('.minimize-map').height('50px');
     }
   }
   onEditorCollapeBtnClicked(){
@@ -60,10 +62,12 @@ export class AppComponent implements OnInit {
       this.rightAreaSize = this.minAreaSize;
       this.leftAreaSize =this.maxAreaSize;
       this.isMapMinimize = false;
+      $('.minimize-editor').height('100vh');
     }
     else{
       this.rightAreaSize = this.defaultRightAreaSize;
       this.leftAreaSize = this.defaultLeftAreaSize;
+      $('.minimize-editor').height('50px');
     }
   }
   onGeoJsonChange(features:FeatureCollection){

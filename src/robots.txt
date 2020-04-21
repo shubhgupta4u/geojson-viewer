@@ -1,0 +1,4 @@
+# Allow all URLs (see http://www.robotstxt.org/robotstxt.html)
+User-agent: *
+Sitemap: https://geojson.in/sitemap.xml
+Disallow: https://maps.googleapis.com/api/js/

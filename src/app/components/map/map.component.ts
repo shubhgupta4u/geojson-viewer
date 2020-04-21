@@ -24,41 +24,18 @@ export class MapComponent implements OnInit {
                         debounceMs: 200,sortable: true, editable: false
                        }
   drawnShapes: Array<any>;
-  map: google.maps.Map;
-  bounds: google.maps.LatLngBounds;
-  mapOptions:any = {
-    center: this.defaultMapLoc,
-    zoom: this.defaultZoom, controlSize: 25,
-    fullscreenControl: false,
-    signInControl: false,
-    streetViewControl: false,
-    rotateControl: false,
-    gestureHandling: 'cooperative',
-    scrollwheel: true,
-    zoomControl: true,
-    minZoom:2,
-    zoomControlOptions: {
-      position: google.maps.ControlPosition.LEFT_TOP,
-      style: google.maps.ZoomControlStyle.SMALL
-    },
-    restriction:{
-      latLngBounds:{
-        north:85,
-        south:-85,
-        west:-179.9,
-        east:179.9
-      }
-    }
+  map: any; //google.maps.Map;
+  bounds: any; // google.maps.LatLngBounds;
+  mapOptions:any;
+  markerOption: any = {
   };
-  markerOption: google.maps.MarkerOptions = {
-  };
-  polygonOption: google.maps.PolygonOptions = {
+  polygonOption: any = {
     geodesic: true,
     strokeColor: '#FF0000',
     strokeOpacity: 1.0,
     strokeWeight: 2
   };
-  polylineOption: google.maps.PolygonOptions = {
+  polylineOption: any = {
     strokeColor: '#FF0000',
     strokeOpacity: 0.8,
     strokeWeight: 2,
@@ -73,7 +50,40 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {    
     /***** Create map *****/
-    this.map = new google.maps.Map(document.getElementById('map'), this.mapOptions);
+    let self = this;
+    $(document).ready(()=>{
+      self.initialiseMap(self);
+    })
+  }
+  initialiseMap(self){
+    if(!self){
+      self = this;
+    }
+    self.mapOptions = {
+      center: this.defaultMapLoc,
+      zoom: this.defaultZoom, controlSize: 25,
+      fullscreenControl: false,
+      signInControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      gestureHandling: 'cooperative',
+      scrollwheel: true,
+      zoomControl: true,
+      minZoom:2,
+      zoomControlOptions: {
+        position: google.maps.ControlPosition.LEFT_TOP,
+        style: google.maps.ZoomControlStyle.SMALL
+      },
+      restriction:{
+        latLngBounds:{
+          north:85,
+          south:-85,
+          west:-179.9,
+          east:179.9
+        }
+      }
+    };
+    self.map = new google.maps.Map(document.getElementById('map'), self.mapOptions);
   }
   onGeoJsonChange(features: FeatureCollection) {
     if (this.drawnShapes && this.drawnShapes.length > 0) {
